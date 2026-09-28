@@ -1,13 +1,15 @@
-const fs = require('fs');
 const path = require('path');
 
+// Load backend/.env by absolute path so this works regardless of the cwd
+// the server or a seed script is started from (pm2, repo root, etc.).
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
+
 /*
- * Resolves the MongoDB connection string for 5Star.
+ * Resolves the MongoDB connection string for 5Star from backend/.env.
  *
  * Priority:
- *   1. process.env.MONGO_URI (backend/.env override — a full URI)
- *   2. Built from the project-root 5Star/.env, which (per MongoDB Atlas
- *      onboarding) provides:
+ *   1. MONGO_URI — a full connection string
+ *   2. Built from the MongoDB Atlas onboarding variables:
  *        MONGODB_URI       - mongodb+srv://[user:pass@]host   (may omit credentials and db)
  *        MONGODB_USERNAME  - used if MONGODB_URI has no embedded credentials
  *        MONGODB_PASSWORD  - "
@@ -16,27 +18,6 @@ const path = require('path');
  * If the resolved URI has no database path segment, `/fivestar` is appended
  * (before any query string) so all collections land in one named database.
  */
-const parseEnvFile = (filePath) => {
-  const out = {};
-  try {
-    const raw = fs.readFileSync(filePath, 'utf8');
-    raw.split(/\r?\n/).forEach((line) => {
-      const trimmed = line.trim();
-      if (!trimmed || trimmed.startsWith('#')) return;
-      const eq = trimmed.indexOf('=');
-      if (eq === -1) return;
-      const key = trimmed.slice(0, eq).trim();
-      let val = trimmed.slice(eq + 1).trim();
-      val = val.replace(/^["']|["']$/g, '');
-      out[key] = val;
-    });
-  } catch (err) {
-    /* file missing — return {} */
-  }
-  return out;
-};
-
-const readRootEnv = () => parseEnvFile(path.join(__dirname, '..', '..', '.env'));
 
 // Insert user:pass into a mongodb URI that has no embedded credentials.
 const withCredentials = (uri, username, password) => {
@@ -74,10 +55,9 @@ const ensureDbName = (uri, dbName = 'fivestar') => {
 const getMongoUri = () => {
   if (process.env.MONGO_URI) return ensureDbName(process.env.MONGO_URI);
 
-  const root = readRootEnv();
-  if (root.MONGODB_URI) {
-    const withCreds = withCredentials(root.MONGODB_URI, root.MONGODB_USERNAME, root.MONGODB_PASSWORD);
-    return ensureDbName(withCreds);
+  const { MONGODB_URI, MONGODB_USERNAME, MONGODB_PASSWORD } = process.env;
+  if (MONGODB_URI) {
+    return ensureDbName(withCredentials(MONGODB_URI, MONGODB_USERNAME, MONGODB_PASSWORD));
   }
 
   return ensureDbName('mongodb://localhost:27017/fivestar');
