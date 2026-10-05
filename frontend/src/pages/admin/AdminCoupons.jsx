@@ -67,15 +67,15 @@ const AdminCoupons = () => {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-        <h1 style={{ fontSize: '1.5rem', fontFamily: 'var(--font-heading)', fontWeight: 400 }}>Coupons</h1>
+      <div className="admin-page-head">
+        <h1 className="admin-page-title">Coupons</h1>
         <button className="btn btn-primary" onClick={openCreate}><FiPlus style={{ marginRight: '0.4rem' }} /> Add Coupon</button>
       </div>
 
-      <div className="grid-3">
+      <div className="admin-cards">
         {coupons.map((c) => (
           <div key={c._id} className="card" style={{ padding: '1.25rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
               <strong style={{ color: 'var(--gold-dark)', fontSize: '1.1rem' }}>{c.code}</strong>
               <span className={c.isActive ? 'badge badge-success' : 'badge badge-danger'}>{c.isActive ? 'Active' : 'Inactive'}</span>
             </div>
@@ -86,7 +86,7 @@ const AdminCoupons = () => {
             </p>
             <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Min order ₹{c.minOrderAmount || 0} · Used {c.usedCount}{c.usageLimit ? `/${c.usageLimit}` : ''}</p>
             <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Expires {new Date(c.expiryDate).toLocaleString()}</p>
-            <div style={{ display: 'flex', gap: '0.4rem', marginTop: '1rem' }}>
+            <div className="admin-card-actions">
               <button className="btn btn-ghost btn-sm" onClick={() => openEdit(c)}><FiEdit2 size={14} /></button>
               <button className="btn btn-danger btn-sm" onClick={() => handleDelete(c._id)}><FiTrash2 size={14} /></button>
             </div>
@@ -145,11 +145,11 @@ const AdminCoupons = () => {
                   <input className="form-control" type="datetime-local" name="expiryDate" value={form.expiryDate} onChange={handleChange} required />
                 </div>
               </div>
-              <div style={{ display: 'flex', gap: '1.5rem', marginBottom: '1rem' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem' }}>
+              <div className="admin-checks">
+                <label>
                   <input type="checkbox" name="isActive" checked={form.isActive} onChange={handleChange} /> Active
                 </label>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem' }}>
+                <label>
                   <input type="checkbox" name="showOnCheckout" checked={form.showOnCheckout} onChange={handleChange} /> Show on Checkout
                 </label>
               </div>

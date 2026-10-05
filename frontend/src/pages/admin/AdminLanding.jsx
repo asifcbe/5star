@@ -104,7 +104,7 @@ const AdminLanding = () => {
 
   return (
     <div>
-      <h1 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', fontFamily: 'var(--font-heading)', fontWeight: 400 }}>Landing Page</h1>
+      <h1 className="admin-page-title">Landing Page</h1>
 
       <form onSubmit={handleSubmit}>
         <div className="admin-section">
@@ -141,13 +141,13 @@ const AdminLanding = () => {
           </div>
         </div>
 
-        <button className="btn btn-primary" disabled={saving}>{saving ? 'Saving...' : 'Save Landing Content'}</button>
+        <button className="btn btn-primary admin-save-btn" disabled={saving}>{saving ? 'Saving...' : 'Save Landing Content'}</button>
       </form>
 
       <div className="admin-section" style={{ marginTop: '1.5rem' }}>
         <div className="admin-section-title">Hero Carousel Slides</div>
 
-        <div className="grid-3" style={{ marginBottom: '1.5rem' }}>
+        <div className="admin-cards" style={{ marginBottom: '1.5rem' }}>
           {(landing.carouselImages || []).map((img) => (
             <div key={img._id} className="card" style={{ padding: '0.75rem' }}>
               {editingId === img._id ? (
@@ -213,7 +213,7 @@ const AdminLanding = () => {
           <input className="form-control" placeholder="Subcaption" value={carouselMeta.subcaption} onChange={(e) => setCarouselMeta({ ...carouselMeta, subcaption: e.target.value })} />
           <input className="form-control" placeholder="Alt text" value={carouselMeta.alt} onChange={(e) => setCarouselMeta({ ...carouselMeta, alt: e.target.value })} />
         </div>
-        <div style={{ display: 'flex', gap: '0.75rem' }}>
+        <div className="admin-upload-row">
           <input type="file" accept="image/*" className="form-control" onChange={(e) => setCarouselFile(e.target.files[0])} />
           <button type="button" className="btn btn-outline" onClick={uploadCarousel} disabled={uploading}>
             <FiUpload style={{ marginRight: '0.4rem' }} /> {uploading ? 'Uploading...' : 'Add Slide'}

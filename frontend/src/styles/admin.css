@@ -1,0 +1,157 @@
+/* ====== ADMIN PANEL LAYOUT & RESPONSIVE RULES ======
+   Imported by AdminLayout. Desktop keeps the collapsible sidebar; at <=768px
+   the sidebar becomes an off-canvas drawer behind a sticky top bar, tables
+   reflow into stacked cards, and multi-column rows wrap. */
+
+.admin-shell { display:flex; min-height:100vh; }
+
+.admin-sidebar {
+  width:230px; flex-shrink:0;
+  background:var(--black-card); border-right:1px solid var(--black-border);
+  transition:width 0.2s ease, transform 0.25s ease;
+  display:flex; flex-direction:column;
+  position:sticky; top:0; height:100vh;
+}
+.admin-sidebar.collapsed { width:68px; }
+.admin-sidebar-head {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:1.25rem 1rem; border-bottom:1px solid var(--black-border);
+}
+.admin-sidebar nav { flex:1; overflow-y:auto; }
+.admin-brand { font-family:var(--font-heading); color:var(--gold-dark); font-size:1.15rem; letter-spacing:0.06em; }
+.admin-icon-btn {
+  background:none; border:none; cursor:pointer; color:var(--text-secondary);
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width:36px; min-height:36px; border-radius:var(--radius);
+}
+
+.admin-topbar { display:none; }
+.admin-backdrop { display:none; }
+
+.admin-main { flex:1; min-width:0; padding:2rem; background:var(--black); overflow-x:hidden; }
+
+/* Page header: title + primary action, wraps on narrow screens */
+.admin-page-head {
+  display:flex; justify-content:space-between; align-items:center;
+  flex-wrap:wrap; gap:0.75rem; margin-bottom:1.5rem;
+}
+.admin-page-title { font-size:1.5rem; font-family:var(--font-heading); font-weight:400; margin-bottom:1.5rem; }
+.admin-page-head .admin-page-title { margin-bottom:0; }
+.admin-actions { display:flex; gap:0.5rem; flex-wrap:wrap; }
+
+.admin-checks { display:flex; gap:0.75rem 1.5rem; flex-wrap:wrap; margin-bottom:1rem; }
+.admin-checks label { display:flex; align-items:center; gap:0.4rem; font-size:0.85rem; }
+.admin-check-cell { display:flex; align-items:center; padding-top:1.5rem; }
+
+.admin-filters { display:flex; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap; }
+.admin-filters .admin-search { position:relative; flex:1 1 260px; }
+.admin-filters select { width:auto; }
+
+.admin-pagination { display:flex; gap:0.5rem; margin-top:1rem; flex-wrap:wrap; }
+
+.admin-upload-row { display:flex; gap:0.75rem; }
+.admin-upload-row .btn { flex-shrink:0; }
+
+.variant-row { display:flex; gap:0.5rem; margin-bottom:0.5rem; }
+
+/* Tables scroll sideways inside their section at every width (incl. phones).
+   Cells don't wrap, so the table keeps its full row layout and the wrapper scrolls. */
+.admin-table-wrap {
+  overflow-x:auto; overscroll-behavior-x:contain;
+  -webkit-overflow-scrolling:touch; touch-action:pan-x pan-y;
+}
+.admin-table-wrap .data-table { min-width:680px; }
+.admin-table-wrap .data-table th,
+.admin-table-wrap .data-table td { white-space:nowrap; }
+.admin-table-compact .data-table { min-width:0; }
+
+/* Always-visible horizontal scrollbar so overflowing tables are obviously scrollable */
+.admin-table-wrap { scrollbar-width:auto; scrollbar-color:var(--gold-dark) var(--black-border); padding-bottom:4px; }
+.admin-table-wrap::-webkit-scrollbar { height:10px; -webkit-appearance:none; }
+.admin-table-wrap::-webkit-scrollbar-track { background:var(--black-border); border-radius:5px; }
+.admin-table-wrap::-webkit-scrollbar-thumb { background:var(--gold-dark); border-radius:5px; }
+.admin-table-wrap::-webkit-scrollbar-thumb:hover { background:var(--gold); }
+
+/* Card grids (coupons, branches, slides) fill as many columns as fit */
+.admin-cards {
+  display:grid; gap:1.25rem;
+  grid-template-columns:repeat(auto-fill, minmax(min(250px, 100%), 1fr));
+}
+.admin-main .card { overflow-wrap:anywhere; }
+.admin-card-actions { display:flex; gap:0.4rem; margin-top:1rem; }
+
+.admin-main .stat-value { font-size:1.6rem; font-weight:700; }
+.variant-row .v-price { max-width:110px; }
+.variant-row .v-stock { max-width:90px; }
+
+/* ---------- Tablet ---------- */
+@media (max-width:1024px) {
+  .admin-main { padding:1.5rem; }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width:768px) {
+  .admin-shell { flex-direction:column; }
+
+  .admin-topbar {
+    display:flex; align-items:center; gap:0.5rem;
+    position:sticky; top:0; z-index:400;
+    padding:0.5rem 0.75rem;
+    background:var(--black-card); border-bottom:1px solid var(--black-border);
+  }
+  .admin-topbar-title {
+    flex:1; min-width:0; font-size:0.95rem; color:var(--text-primary);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+
+  .admin-sidebar,
+  .admin-sidebar.collapsed {
+    position:fixed; top:0; left:0; z-index:600;
+    width:min(280px, 82vw); height:100dvh;
+    transform:translateX(-100%);
+    box-shadow:none;
+  }
+  .admin-sidebar.open { transform:translateX(0); box-shadow:0 0 40px rgba(40,32,15,0.35); }
+  .admin-backdrop.open {
+    display:block; position:fixed; inset:0; z-index:550;
+    background:rgba(40,32,15,0.45);
+  }
+  .admin-sidebar nav a, .admin-sidebar-foot a, .admin-sidebar-foot button { min-height:44px; }
+
+  .admin-main { padding:1rem 0.85rem 2rem; }
+  .admin-page-title { font-size:1.3rem; margin-bottom:1rem; }
+  .admin-page-head { margin-bottom:1rem; }
+
+  .admin-main .admin-section { padding:1rem; border-radius:var(--radius-lg); }
+  .admin-main .admin-section-title { padding-bottom:0.75rem; margin-bottom:1rem; }
+
+  /* Larger tap targets; 16px inputs stop iOS zooming on focus */
+  .admin-main .btn-sm, .modal-box .btn-sm { min-height:36px; min-width:36px; justify-content:center; }
+  .admin-main .form-control, .modal-box .form-control { font-size:16px; }
+  .admin-main .modal-close { min-width:40px; min-height:40px; display:inline-flex; align-items:center; justify-content:center; }
+  .admin-main input[type="checkbox"] { width:18px; height:18px; }
+  .admin-cards { gap:0.85rem; }
+
+  .admin-filters select { width:100%; flex:1 1 100%; }
+  .admin-upload-row { flex-direction:column; }
+  .admin-check-cell { padding-top:0; }
+
+  .variant-row {
+    display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    padding:0.6rem; border:1px solid var(--black-border); border-radius:var(--radius);
+  }
+  .variant-row .v-price, .variant-row .v-stock { max-width:none; }
+
+  .admin-save-btn { width:100%; }
+
+  /* Tables keep their columns and scroll sideways; tighter cells fit more on screen */
+  .admin-main .data-table th { padding:0.6rem 0.75rem; }
+  .admin-main .data-table td { padding:0.65rem 0.75rem; }
+}
+
+@media (max-width:480px) {
+  /* Dense tiles stay 2-up on phones instead of the global 1-column collapse */
+  .admin-main .admin-tiles { grid-template-columns:repeat(2, minmax(0,1fr)); gap:0.75rem; }
+  .admin-main .stat-card { padding:1rem; }
+  .admin-main .stat-value { font-size:1.25rem; }
+}

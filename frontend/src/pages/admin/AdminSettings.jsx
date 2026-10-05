@@ -84,7 +84,7 @@ const AdminSettings = () => {
 
   return (
     <div>
-      <h1 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', fontFamily: 'var(--font-heading)', fontWeight: 400 }}>Settings</h1>
+      <h1 className="admin-page-title">Settings</h1>
       <form onSubmit={handleSubmit}>
         <div className="admin-section">
           <div className="admin-section-title">Store Branding</div>
@@ -171,7 +171,7 @@ const AdminSettings = () => {
 
         <div className="admin-section">
           <div className="admin-section-title">Store Theme</div>
-          <div className="grid-3">
+          <div className="grid-3 admin-tiles">
             {THEMES.map((t) => (
               <div key={t.id} onClick={() => setSettings({ ...settings, theme: t.id })} style={{
                 cursor: 'pointer', padding: '1rem', borderRadius: 'var(--radius)',
@@ -186,7 +186,7 @@ const AdminSettings = () => {
           </div>
         </div>
 
-        <button className="btn btn-primary btn-lg" disabled={saving}>{saving ? 'Saving...' : 'Save Settings'}</button>
+        <button className="btn btn-primary btn-lg admin-save-btn" disabled={saving}>{saving ? 'Saving...' : 'Save Settings'}</button>
       </form>
 
       <div className="admin-section" style={{ border: '1px solid rgba(192,57,43,0.35)', marginTop: '2rem' }}>

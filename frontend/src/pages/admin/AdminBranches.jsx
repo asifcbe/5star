@@ -66,22 +66,22 @@ const AdminBranches = () => {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-        <h1 style={{ fontSize: '1.5rem', fontFamily: 'var(--font-heading)', fontWeight: 400 }}>Branches</h1>
+      <div className="admin-page-head">
+        <h1 className="admin-page-title">Branches</h1>
         <button className="btn btn-primary" onClick={openCreate}><FiPlus style={{ marginRight: '0.4rem' }} /> Add Branch</button>
       </div>
 
-      <div className="grid-3">
+      <div className="admin-cards">
         {branches.map((b) => (
           <div key={b._id} className="card" style={{ padding: '1.25rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem', marginBottom: '0.5rem' }}>
               <strong style={{ color: 'var(--gold-dark)' }}>{b.name}</strong>
               <span className={b.isActive ? 'badge badge-success' : 'badge badge-danger'}>{b.isActive ? 'Active' : 'Inactive'}</span>
             </div>
             <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>{b.address}</p>
             {b.timings && <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>{b.timings}</p>}
             {b.isComingSoon && <span className="badge badge-warning" style={{ marginTop: '0.4rem', display: 'inline-block' }}>Coming Soon</span>}
-            <div style={{ display: 'flex', gap: '0.4rem', marginTop: '1rem' }}>
+            <div className="admin-card-actions">
               <button className="btn btn-ghost btn-sm" onClick={() => openEdit(b)}><FiEdit2 size={14} /></button>
               <button className="btn btn-danger btn-sm" onClick={() => handleDelete(b._id)}><FiTrash2 size={14} /></button>
             </div>
@@ -138,11 +138,11 @@ const AdminBranches = () => {
                   <label className="form-label">Display Order</label>
                   <input className="form-control" type="number" name="order" value={form.order} onChange={handleChange} />
                 </div>
-                <div className="form-group" style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', paddingTop: '1.5rem' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem' }}>
+                <div className="form-group admin-checks admin-check-cell">
+                  <label>
                     <input type="checkbox" name="isActive" checked={form.isActive} onChange={handleChange} /> Active
                   </label>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem' }}>
+                  <label>
                     <input type="checkbox" name="isComingSoon" checked={form.isComingSoon} onChange={handleChange} /> Coming Soon
                   </label>
                 </div>

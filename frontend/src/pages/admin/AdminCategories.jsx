@@ -64,8 +64,8 @@ const AdminCategories = () => {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-        <h1 style={{ fontSize: '1.5rem', fontFamily: 'var(--font-heading)', fontWeight: 400 }}>Categories</h1>
+      <div className="admin-page-head">
+        <h1 className="admin-page-title">Categories</h1>
         <button className="btn btn-primary" onClick={openCreate}><FiPlus style={{ marginRight: '0.4rem' }} /> Add Category</button>
       </div>
 
@@ -73,26 +73,28 @@ const AdminCategories = () => {
         <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
           These categories power the "Category" dropdown when creating products and the Shop by Category section on the homepage. Each category belongs to one product family (bags / jerkins / trolleys).
         </p>
-        <table className="data-table">
-          <thead>
-            <tr><th>Name</th><th>Family</th><th>Slug</th><th>Order</th><th>Status</th><th></th></tr>
-          </thead>
-          <tbody>
-            {categories.map((c) => (
-              <tr key={c._id}>
-                <td>{c.name}</td>
-                <td style={{ textTransform: 'capitalize' }}>{c.productType}</td>
-                <td style={{ color: 'var(--text-muted)' }}>{c.slug}</td>
-                <td>{c.order}</td>
-                <td><span className={c.isActive ? 'badge badge-success' : 'badge badge-danger'}>{c.isActive ? 'Active' : 'Inactive'}</span></td>
-                <td>
-                  <button onClick={() => openEdit(c)} className="btn btn-ghost btn-sm" style={{ marginRight: '0.4rem' }}><FiEdit2 size={14} /></button>
-                  <button onClick={() => handleDelete(c._id)} className="btn btn-danger btn-sm"><FiTrash2 size={14} /></button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="admin-table-wrap">
+          <table className="data-table">
+            <thead>
+              <tr><th>Name</th><th>Family</th><th>Slug</th><th>Order</th><th>Status</th><th></th></tr>
+            </thead>
+            <tbody>
+              {categories.map((c) => (
+                <tr key={c._id}>
+                  <td data-label="Name">{c.name}</td>
+                  <td data-label="Family" style={{ textTransform: 'capitalize' }}>{c.productType}</td>
+                  <td data-label="Slug" style={{ color: 'var(--text-muted)' }}>{c.slug}</td>
+                  <td data-label="Order">{c.order}</td>
+                  <td data-label="Status"><span className={c.isActive ? 'badge badge-success' : 'badge badge-danger'}>{c.isActive ? 'Active' : 'Inactive'}</span></td>
+                  <td>
+                    <button onClick={() => openEdit(c)} className="btn btn-ghost btn-sm" style={{ marginRight: '0.4rem' }}><FiEdit2 size={14} /></button>
+                    <button onClick={() => handleDelete(c._id)} className="btn btn-danger btn-sm"><FiTrash2 size={14} /></button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         {categories.length === 0 && <p style={{ color: 'var(--text-muted)', textAlign: 'center', padding: '2rem 0' }}>No categories yet. Add your first one.</p>}
       </div>
 
@@ -119,7 +121,7 @@ const AdminCategories = () => {
                   <label className="form-label">Display Order</label>
                   <input className="form-control" type="number" name="order" value={form.order} onChange={handleChange} />
                 </div>
-                <div className="form-group" style={{ display: 'flex', alignItems: 'center', paddingTop: '1.5rem' }}>
+                <div className="form-group admin-check-cell">
                   <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem' }}>
                     <input type="checkbox" name="isActive" checked={form.isActive} onChange={handleChange} /> Active
                   </label>

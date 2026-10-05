@@ -135,39 +135,41 @@ const AdminProducts = () => {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-        <h1 style={{ fontSize: '1.5rem', fontFamily: 'var(--font-heading)', fontWeight: 400 }}>Products</h1>
+      <div className="admin-page-head">
+        <h1 className="admin-page-title">Products</h1>
         <button className="btn btn-primary" onClick={openCreate}><FiPlus style={{ marginRight: '0.4rem' }} /> Add Product</button>
       </div>
 
       <div className="admin-section">
-        <table className="data-table">
-          <thead>
-            <tr><th>Image</th><th>Name</th><th>Brand</th><th>SKU</th><th>Family</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th></th></tr>
-          </thead>
-          <tbody>
-            {products.map((p) => (
-              <tr key={p._id}>
-                <td><img src={getImageUrl(p.images?.[0])} onError={handleImageError} alt={p.name} style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 4 }} /></td>
-                <td>{p.name}</td>
-                <td>{p.brand}</td>
-                <td>{p.sku}</td>
-                <td style={{ textTransform: 'capitalize' }}>{p.productType}</td>
-                <td style={{ textTransform: 'capitalize' }}>{p.category?.replace(/-/g, ' ')}</td>
-                <td>₹{p.price}{p.variants?.length > 0 && <span className="badge badge-info" style={{ marginLeft: '0.4rem' }}>{p.variants.length} options</span>}</td>
-                <td>{p.stock}</td>
-                <td>
-                  <span className={p.isActive ? 'badge badge-success' : 'badge badge-danger'}>{p.isActive ? 'Active' : 'Inactive'}</span>
-                  {p.featured && <span className="badge badge-warning" style={{ marginLeft: '0.3rem' }}>Featured</span>}
-                </td>
-                <td>
-                  <button onClick={() => openEdit(p)} className="btn btn-ghost btn-sm" style={{ marginRight: '0.4rem' }}><FiEdit2 size={14} /></button>
-                  <button onClick={() => handleDelete(p._id)} className="btn btn-danger btn-sm"><FiTrash2 size={14} /></button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="admin-table-wrap">
+          <table className="data-table">
+            <thead>
+              <tr><th>Image</th><th>Name</th><th>Brand</th><th>SKU</th><th>Family</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th></th></tr>
+            </thead>
+            <tbody>
+              {products.map((p) => (
+                <tr key={p._id}>
+                  <td data-label="Image"><img src={getImageUrl(p.images?.[0])} onError={handleImageError} alt={p.name} style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 4 }} /></td>
+                  <td data-label="Name">{p.name}</td>
+                  <td data-label="Brand">{p.brand}</td>
+                  <td data-label="SKU">{p.sku}</td>
+                  <td data-label="Family" style={{ textTransform: 'capitalize' }}>{p.productType}</td>
+                  <td data-label="Category" style={{ textTransform: 'capitalize' }}>{p.category?.replace(/-/g, ' ')}</td>
+                  <td data-label="Price">₹{p.price}{p.variants?.length > 0 && <span className="badge badge-info" style={{ marginLeft: '0.4rem' }}>{p.variants.length} options</span>}</td>
+                  <td data-label="Stock">{p.stock}</td>
+                  <td data-label="Status">
+                    <span className={p.isActive ? 'badge badge-success' : 'badge badge-danger'}>{p.isActive ? 'Active' : 'Inactive'}</span>
+                    {p.featured && <span className="badge badge-warning" style={{ marginLeft: '0.3rem' }}>Featured</span>}
+                  </td>
+                  <td>
+                    <button onClick={() => openEdit(p)} className="btn btn-ghost btn-sm" style={{ marginRight: '0.4rem' }}><FiEdit2 size={14} /></button>
+                    <button onClick={() => handleDelete(p._id)} className="btn btn-danger btn-sm"><FiTrash2 size={14} /></button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {modalOpen && (
@@ -291,23 +293,23 @@ const AdminProducts = () => {
                   If a product has options like size or colour, add them here. Each variant has its own price and stock, and customers pick one at checkout. Leave empty for a simple single-price product.
                 </p>
                 {form.variants.map((v, i) => (
-                  <div key={i} style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                    <input className="form-control" placeholder="Option name (e.g. Size)" value={v.name} onChange={(e) => updateVariant(i, 'name', e.target.value)} />
+                  <div key={i} className="variant-row">
+                    <input className="form-control" placeholder="Option (e.g. Size)" value={v.name} onChange={(e) => updateVariant(i, 'name', e.target.value)} />
                     <input className="form-control" placeholder="Value (e.g. L)" value={v.value} onChange={(e) => updateVariant(i, 'value', e.target.value)} />
-                    <input className="form-control" placeholder="Variant SKU (optional)" value={v.sku} onChange={(e) => updateVariant(i, 'sku', e.target.value)} />
-                    <input className="form-control" placeholder="Price (₹)" type="number" value={v.price} onChange={(e) => updateVariant(i, 'price', e.target.value)} style={{ maxWidth: 110 }} />
-                    <input className="form-control" placeholder="Stock" type="number" value={v.stock} onChange={(e) => updateVariant(i, 'stock', e.target.value)} style={{ maxWidth: 90 }} />
+                    <input className="form-control" placeholder="SKU (optional)" value={v.sku} onChange={(e) => updateVariant(i, 'sku', e.target.value)} />
+                    <input className="form-control v-price" placeholder="Price (₹)" type="number" value={v.price} onChange={(e) => updateVariant(i, 'price', e.target.value)} />
+                    <input className="form-control v-stock" placeholder="Stock" type="number" value={v.stock} onChange={(e) => updateVariant(i, 'stock', e.target.value)} />
                     <button type="button" className="btn btn-danger btn-sm" onClick={() => removeVariant(i)}><FiX size={14} /></button>
                   </div>
                 ))}
                 <button type="button" className="btn btn-ghost btn-sm" onClick={addVariant}><FiPlus size={14} style={{ marginRight: '0.3rem' }} /> Add Variant</button>
               </div>
 
-              <div style={{ display: 'flex', gap: '1.5rem', marginBottom: '1rem' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem' }}>
+              <div className="admin-checks">
+                <label>
                   <input type="checkbox" name="featured" checked={form.featured} onChange={handleChange} /> Featured
                 </label>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem' }}>
+                <label>
                   <input type="checkbox" name="isActive" checked={form.isActive} onChange={handleChange} /> Active
                 </label>
               </div>

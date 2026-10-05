@@ -82,6 +82,16 @@ const Footer = () => {
           © {new Date().getFullYear()} {settings?.storeName || '5Star'}. All rights reserved.
         </span>
         <span style={{ color: '#9c8f6f', fontSize: '0.78rem' }}>Secure Payments by Razorpay</span>
+        <span style={{ color: '#9c8f6f', fontSize: '0.78rem' }}>
+          Powered by{' '}
+          <a
+            href="https://thesolocompiler.com" target="_blank" rel="noopener noreferrer"
+            title="Want a website like this? Get in touch."
+            style={{ color: '#d4af37', textDecoration: 'none' }}
+          >
+            thesolocompiler.com
+          </a>
+        </span>
       </div>
     </footer>
   );

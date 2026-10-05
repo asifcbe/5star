@@ -102,9 +102,9 @@ const AdminOrders = () => {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-        <h1 style={{ fontSize: '1.5rem', fontFamily: 'var(--font-heading)', fontWeight: 400 }}>Orders</h1>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
+      <div className="admin-page-head">
+        <h1 className="admin-page-title">Orders</h1>
+        <div className="admin-actions">
           {selected.length > 0 && (
             <button className="btn btn-outline btn-sm" onClick={printSelected}><FiPrinter style={{ marginRight: '0.3rem' }} /> Print Selected ({selected.length})</button>
           )}
@@ -112,44 +112,46 @@ const AdminOrders = () => {
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
-        <div style={{ position: 'relative', flex: '1 1 260px' }}>
+      <div className="admin-filters">
+        <div className="admin-search">
           <FiSearch style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
           <input className="form-control" style={{ paddingLeft: '2.4rem' }} placeholder="Search by order ID, name, phone..." value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} />
         </div>
-        <select className="form-control" style={{ width: 'auto' }} value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}>
+        <select className="form-control" value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}>
           <option value="">All Statuses</option>
           {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
         </select>
       </div>
 
       <div className="admin-section">
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th></th><th>Order ID</th><th>Customer</th><th>Status</th><th>Payment</th><th>Total</th><th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((o) => (
-              <tr key={o._id}>
-                <td><input type="checkbox" checked={selected.includes(o._id)} onChange={() => toggleSelect(o._id)} /></td>
-                <td style={{ cursor: 'pointer', color: 'var(--gold-dark)' }} onClick={() => setActiveOrder(o)}>#{o.orderId}</td>
-                <td>{o.customerInfo?.name}</td>
-                <td><span className="badge badge-gold" style={{ textTransform: 'capitalize' }}>{o.orderStatus}</span></td>
-                <td><span className="badge badge-info" style={{ textTransform: 'capitalize' }}>{o.paymentStatus}</span></td>
-                <td>₹{o.total}</td>
-                <td>
-                  <button className="btn btn-ghost btn-sm" onClick={() => printSingle(o)}><FiPrinter size={14} /></button>
-                  <button className="btn btn-danger btn-sm" onClick={() => deleteOrder(o._id)} style={{ marginLeft: '0.3rem' }}><FiTrash2 size={14} /></button>
-                </td>
+        <div className="admin-table-wrap">
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th></th><th>Order ID</th><th>Customer</th><th>Status</th><th>Payment</th><th>Total</th><th></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {orders.map((o) => (
+                <tr key={o._id}>
+                  <td data-label="Select"><input type="checkbox" checked={selected.includes(o._id)} onChange={() => toggleSelect(o._id)} /></td>
+                  <td data-label="Order ID" style={{ cursor: 'pointer', color: 'var(--gold-dark)' }} onClick={() => setActiveOrder(o)}>#{o.orderId}</td>
+                  <td data-label="Customer">{o.customerInfo?.name}</td>
+                  <td data-label="Status"><span className="badge badge-gold" style={{ textTransform: 'capitalize' }}>{o.orderStatus}</span></td>
+                  <td data-label="Payment"><span className="badge badge-info" style={{ textTransform: 'capitalize' }}>{o.paymentStatus}</span></td>
+                  <td data-label="Total">₹{o.total}</td>
+                  <td>
+                    <button className="btn btn-ghost btn-sm" onClick={() => printSingle(o)}><FiPrinter size={14} /></button>
+                    <button className="btn btn-danger btn-sm" onClick={() => deleteOrder(o._id)} style={{ marginLeft: '0.3rem' }}><FiTrash2 size={14} /></button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
         {pages > 1 && (
-          <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
+          <div className="admin-pagination">
             {Array.from({ length: pages }, (_, i) => i + 1).map((n) => (
               <button key={n} onClick={() => setPage(n)} className={n === page ? 'btn btn-primary btn-sm' : 'btn btn-ghost btn-sm'}>{n}</button>
             ))}
@@ -183,9 +185,9 @@ const AdminOrders = () => {
               <p>{activeOrder.customerInfo.address}, {activeOrder.customerInfo.city}, {activeOrder.customerInfo.state} - {activeOrder.customerInfo.pincode}</p>
             </div>
             {activeOrder.items.map((item, i) => (
-              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', padding: '0.3rem 0' }}>
+              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', fontSize: '0.85rem', padding: '0.3rem 0' }}>
                 <span>{item.name}{item.variantLabel ? ` (${item.variantLabel})` : ''} × {item.quantity}</span>
-                <span>₹{item.price * item.quantity}</span>
+                <span style={{ flexShrink: 0 }}>₹{item.price * item.quantity}</span>
               </div>
             ))}
             <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 700, marginTop: '0.75rem', color: 'var(--gold-dark)' }}>
